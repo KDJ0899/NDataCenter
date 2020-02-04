@@ -34,7 +34,6 @@ public class MainController {
         
 	    try {
 	        String apiURL = "https://openapi.naver.com/v1/datalab/search";
-	        String body1 = "{\"startDate\":\"2017-01-01\",\"endDate\":\"2017-04-30\",\"timeUnit\":\"month\",\"keywordGroups\":[{\"groupName\":\"한글\",\"keywords\":[\"한글\",\"korean\"]},{\"groupName\":\"영어\",\"keywords\":[\"영어\",\"english\"]}],\"device\":\"pc\",\"ages\":[\"1\",\"2\"],\"gender\":\"f\"}";
 	        List<String> keywords = new ArrayList<String>();
 	        keywords.add("삼성");
 	        SearchTrend body = SearchTrend.builder()
@@ -63,8 +62,7 @@ public class MainController {
 	        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
 	        System.out.println(new GsonBuilder().create().toJson(body).getBytes("UTF-8"));
 	        wr.writeBytes(new String(new GsonBuilder().create().toJson(body).getBytes("EUC-KR")));
-//	        wr.writeBytes(body1);
-//	        wr.writeUTF(new GsonBuilder().create().toJson(body));
+
 	        wr.flush();
 	        wr.close();
 	
