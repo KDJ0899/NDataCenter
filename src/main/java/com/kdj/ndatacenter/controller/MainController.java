@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.kdj.ndatacenter.EncodingUTF8;
 import com.kdj.ndatacenter.dto.KeyWord;
@@ -31,15 +32,16 @@ public class MainController {
 	    String clientSecret = "ruHZN2NlCd";//애플리케이션 클라이언트 시크릿값";
 	    String answer="";
         String[] arr;
+        Gson json = new Gson();
         
 	    try {
 	        String apiURL = "https://openapi.naver.com/v1/datalab/search";
 	        List<String> keywords = new ArrayList<String>();
-	        keywords.add("삼성");
+	        keywords.add(encoder.encode("삼성"));
 	        SearchTrend body = SearchTrend.builder()
 	        					.startDate("2017-01-01")
 	        					.endDate("2017-04-30")
-	        					.timeUnit("month")
+	        					.timeUnit("week")
 	        					.keywordGroups(new KeyWord[] {
 	        							KeyWord.builder()
 	        							.groupName("hi")
@@ -50,19 +52,21 @@ public class MainController {
 	        					.ages(new String[] {})
 	        					.gender("")
 	        					.build();
+	        
+            String body1 = "{\"startDate\":\"2017-01-01\",\"endDate\":\"2017-04-30\",\"timeUnit\":\"month\",\"keywordGroups\":[{\"groupName\":\"한글\",\"keywords\":[\"한글\",\"korean\"]},{\"groupName\":\"영어\",\"keywords\":[\"영어\",\"english\"]}],\"device\":\"pc\",\"ages\":[\"1\",\"2\"],\"gender\":\"f\"}";
+
 	        URL url = new URL(apiURL);
 	        HttpURLConnection con = (HttpURLConnection)url.openConnection();
 	        con.setRequestMethod("POST");
 	        con.setRequestProperty("X-Naver-Client-Id", clientId);
 	        con.setRequestProperty("X-Naver-Client-Secret", clientSecret);
 	        con.setRequestProperty("Content-Type", "application/json");
+	        
 //	        con.setRequestProperty("Accept-Charset", "UTF-8"); 
 	
 	        con.setDoOutput(true);
 	        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-	        System.out.println(new GsonBuilder().create().toJson(body).getBytes("UTF-8"));
-	        wr.writeBytes(new String(new GsonBuilder().create().toJson(body).getBytes("EUC-KR")));
-
+	        wr.write(body1.getBytes());
 	        wr.flush();
 	        wr.close();
 	
