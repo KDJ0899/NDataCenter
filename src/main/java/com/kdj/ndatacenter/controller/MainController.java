@@ -9,6 +9,8 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.filter.CharacterEncodingFilter;
@@ -18,6 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.kdj.ndatacenter.EncodingUTF8;
 import com.kdj.ndatacenter.dto.KeyWord;
+import com.kdj.ndatacenter.dto.ResponseResult;
 import com.kdj.ndatacenter.dto.SearchTrend;
 
 @Controller
@@ -26,13 +29,14 @@ public class MainController {
 	EncodingUTF8 encoder = new EncodingUTF8();
 	
 	@RequestMapping("/")
-	public ModelAndView APIExamDatalabTrend() {
+	public ModelAndView APIExamDatalabTrend(HttpServletRequest request) {
 	
 		String clientId = "aYQR3UekVkUdLCaYXjcF";//애플리케이션 클라이언트 아이디값";
 	    String clientSecret = "ruHZN2NlCd";//애플리케이션 클라이언트 시크릿값";
-	    String answer="";
         String[] arr;
         Gson json = new Gson();
+        ResponseResult result = null;
+        
         
 	    try {
 	        String apiURL = "https://openapi.naver.com/v1/datalab/search";
@@ -86,17 +90,15 @@ public class MainController {
 	        br.close();
 	        System.out.println(response);
 	        
-	        answer = URLDecoder.decode(response.toString(),"UTF-8");
+	        result = json.fromJson(response.toString(),ResponseResult.class);
+	        
 	
 	    } catch (Exception e) {
 	        System.out.println(e);
 	    }
-	    
-	    arr = answer.split(",");
-        answer="";
-        for(String str : arr)
-        	answer+=str+"<br>";
-	    return new ModelAndView("welcome","answer",answer);
+	    request.setAttribute("result", result);
+	   
+	    return new ModelAndView("welcome","result",result);
 	}
 	
 
