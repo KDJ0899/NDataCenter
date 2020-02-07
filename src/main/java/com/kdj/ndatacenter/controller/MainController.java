@@ -37,11 +37,11 @@ public class MainController {
 	    try {
 	        String apiURL = "https://openapi.naver.com/v1/datalab/search";
 	        List<String> keywords = new ArrayList<String>();
-	        keywords.add(encoder.encode("삼성"));
+	        keywords.add("코로나");
 	        SearchTrend body = SearchTrend.builder()
-	        					.startDate("2017-01-01")
-	        					.endDate("2017-04-30")
-	        					.timeUnit("week")
+	        					.startDate("2020-01-17")
+	        					.endDate("2020-02-08")
+	        					.timeUnit("date")
 	        					.keywordGroups(new KeyWord[] {
 	        							KeyWord.builder()
 	        							.groupName("hi")
@@ -66,7 +66,7 @@ public class MainController {
 	
 	        con.setDoOutput(true);
 	        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-	        wr.write(body1.getBytes());
+	        wr.write(json.toJson(body).getBytes());
 	        wr.flush();
 	        wr.close();
 	
