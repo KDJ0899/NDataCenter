@@ -18,5 +18,5 @@ public class ResponseResult {
 	@NonNull private String startDate;
 	@NonNull private String endDate;
 	@NonNull private String timeUnit;
-	@NonNull private Results results;
+	@NonNull private Result[] results;
 }

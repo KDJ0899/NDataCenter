@@ -14,10 +14,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Results {
+public class Result {
 	
 	@NonNull private String title;
 	@NonNull private String[] keywords;
-	@NonNull private Data data;
+	@NonNull private FrequencyData[] data;
 	
 }

@@ -42,13 +42,14 @@ public class MainController {
 	        String apiURL = "https://openapi.naver.com/v1/datalab/search";
 	        List<String> keywords = new ArrayList<String>();
 	        keywords.add("코로나");
+	        keywords.add("우한");
 	        SearchTrend body = SearchTrend.builder()
 	        					.startDate("2020-01-17")
 	        					.endDate("2020-02-08")
 	        					.timeUnit("date")
 	        					.keywordGroups(new KeyWord[] {
 	        							KeyWord.builder()
-	        							.groupName("hi")
+	        							.groupName("코로나 바이러스")
 	        							.keywords(keywords)
 	        							.build()
 	        					})
@@ -97,6 +98,9 @@ public class MainController {
 	        System.out.println(e);
 	    }
 	    request.setAttribute("result", result);
+	    
+	    
+	    System.out.println(result.getResults()[0].getData()[0].getPeriod());
 	   
 	    return new ModelAndView("welcome","result",result);
 	}
