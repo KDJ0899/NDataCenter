@@ -6,7 +6,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,31 +37,38 @@ public class MainController {
 	    String clientSecret = "ruHZN2NlCd";//애플리케이션 클라이언트 시크릿값";
         String[] arr;
         Gson json = new Gson();
+        String answer ="";
         ResponseResult result = null;
         
         
 	    try {
 	        String apiURL = "https://openapi.naver.com/v1/datalab/search";
 	        List<String> keywords = new ArrayList<String>();
+	        List<String> keywords2 = new ArrayList<String>();
 	        keywords.add("코로나");
 	        keywords.add("우한");
+	        keywords2.add("마스크");
+	        SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy-MM-dd");
+	        String endDate = format1.format(new Date());
 	        SearchTrend body = SearchTrend.builder()
 	        					.startDate("2020-01-17")
-	        					.endDate("2020-02-08")
+	        					.endDate(endDate)
 	        					.timeUnit("date")
 	        					.keywordGroups(new KeyWord[] {
 	        							KeyWord.builder()
 	        							.groupName("코로나 바이러스")
 	        							.keywords(keywords)
-	        							.build()
+	        							.build(),
+	        							KeyWord.builder()
+	        							.groupName("마스크")
+	        							.keywords(keywords2)
+	        							.build(),
 	        					})
 	        					.device("")
 	        					.ages(new String[] {})
 	        					.gender("")
 	        					.build();
 	        
-            String body1 = "{\"startDate\":\"2017-01-01\",\"endDate\":\"2017-04-30\",\"timeUnit\":\"month\",\"keywordGroups\":[{\"groupName\":\"한글\",\"keywords\":[\"한글\",\"korean\"]},{\"groupName\":\"영어\",\"keywords\":[\"영어\",\"english\"]}],\"device\":\"pc\",\"ages\":[\"1\",\"2\"],\"gender\":\"f\"}";
-
 	        URL url = new URL(apiURL);
 	        HttpURLConnection con = (HttpURLConnection)url.openConnection();
 	        con.setRequestMethod("POST");
@@ -90,19 +99,15 @@ public class MainController {
 	        }
 	        br.close();
 	        System.out.println(response);
-	        
-	        result = json.fromJson(response.toString(),ResponseResult.class);
+	        answer = response.toString();
+//	        result = json.fromJson(response.toString(),ResponseResult.class);
 	        
 	
 	    } catch (Exception e) {
 	        System.out.println(e);
 	    }
-	    request.setAttribute("result", result);
-	    
-	    
-	    System.out.println(result.getResults()[0].getData()[0].getPeriod());
 	   
-	    return new ModelAndView("welcome","result",result);
+	    return new ModelAndView("welcome","result",answer);
 	}
 	
 
