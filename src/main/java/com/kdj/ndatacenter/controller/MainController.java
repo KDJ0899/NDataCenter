@@ -5,7 +5,6 @@ import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,12 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.kdj.ndatacenter.EncodingUTF8;
 import com.kdj.ndatacenter.dto.KeyWord;
 import com.kdj.ndatacenter.dto.ResponseResult;
 import com.kdj.ndatacenter.dto.SearchTrend;
@@ -28,7 +24,6 @@ import com.kdj.ndatacenter.dto.SearchTrend;
 @Controller
 public class MainController {
 	
-	EncodingUTF8 encoder = new EncodingUTF8();
 	
 	@RequestMapping("/")
 	public ModelAndView APIExamDatalabTrend(HttpServletRequest request) {
@@ -75,9 +70,7 @@ public class MainController {
 	        con.setRequestProperty("X-Naver-Client-Id", clientId);
 	        con.setRequestProperty("X-Naver-Client-Secret", clientSecret);
 	        con.setRequestProperty("Content-Type", "application/json");
-	        
-//	        con.setRequestProperty("Accept-Charset", "UTF-8"); 
-	
+	        	
 	        con.setDoOutput(true);
 	        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
 	        wr.write(json.toJson(body).getBytes());
